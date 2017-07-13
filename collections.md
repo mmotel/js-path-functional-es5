@@ -107,9 +107,9 @@ for(var i = 0; i < students.length; i += 1) {
 
 Korzystając z metody `Array.forEach()` możemy skupić się na tym co chcemy zrobić z elementami tablicy, a nie na tym jak po niej iterować.
 
-##### [Przykład 2.2](https://codepen.io/mmotel/pen/ZyBbqy)
+##### [Przykład 2.2](https://codepen.io/mmotel/pen/owmQod)
 ```js
-students.forEach(student => {
+students.forEach(function (student) {
   student.log();
 });
 // -> (0) Christina Richmond
@@ -121,10 +121,10 @@ students.forEach(student => {
 
 Metoda `Array.forEach()` przekazuje do funkcji obsługującej trzy parametry: element tablicy, jego indeks oraz całą tablicę.
 
-##### [Przykład 2.3](https://codepen.io/mmotel/pen/NgbGEx)
+##### [Przykład 2.3](https://codepen.io/mmotel/pen/QgYJmj)
 ```js
-students.forEach( (student, index, students) => {
-  console.log(`Student ${index+1}/${students.length}: ${student}`);
+students.forEach(function (student, index, students) {
+  console.log('Student ' + (index+1) + '/' + students.length + ': ' + student);
 });
 // -> Student 1/5: (0) Christina Richmond
 // -> Student 2/5: (1) Austin Wooten
