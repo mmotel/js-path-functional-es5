@@ -90,11 +90,12 @@ function log (students) {
 
 ## Iteracja
 
-Podstawową operacją na kolekcji jest iteracja. Najprostszym sposobem jest pęta `for-of`.
+Podstawową operacją na kolekcji jest iteracja. Najprostszym sposobem jest pęta `for`.
 
-##### [Przykład 2.1](https://codepen.io/mmotel/pen/pwNJXo)
+##### [Przykład 2.1](https://codepen.io/mmotel/pen/NgoEpQ)
 ```js
-for(let student of students) {
+for(var i = 0; i < students.length; i += 1) {
+  var student = students[i];
   student.log();
 }
 // -> (0) Christina Richmond
