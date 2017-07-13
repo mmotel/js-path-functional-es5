@@ -84,7 +84,7 @@ Pomocnicza funkcja do wyświetlania naszej tablicy studentów.
 
 ```js
 function log (students) {
-  students.forEach(student => student.log());
+  students.forEach(function (student) { student.log() });
 }
 ```
 
