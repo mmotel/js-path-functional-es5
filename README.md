@@ -1,14 +1,6 @@
 # Ścieżka JavaScript: Programowanie funkcyjne
 
-
-
-
-
 ##### ![](/assets/LOGO_SOLWIT.png)
-
-
-
-
 
 ```js
 {
@@ -19,5 +11,7 @@
 }
 ```
 
+### mmotel.gitbooks.io/js-path-functional-es5/content/
 
-### mmotel.gitbooks.io/js-path-functional/content/
+
+
