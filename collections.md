@@ -2,29 +2,30 @@
 
 W ES5 mamy jeden typ reprezentujący kolekcje - `Array`. Razem z ES6 zyskaliśmy dwa kolejne `Set`oraz`Map`. Programowanie funkcyjne znacznie ułatwia operowanie na nich.
 
-W przykładach będziemy korzystali z tablicy [`students`](https://codepen.io/mmotel/pen/rwWVge), przechowującej instanceje klasy `Student`.
+W przykładach będziemy korzystali z tablicy [`students`](https://codepen.io/mmotel/pen/EXrOKW), przechowującej instanceje klasy `Student`.
 
 ```js
-class Student {
-  constructor ({id, firstName, lastName, age, eyeColor,
-                isActive, classes}) {
-    this.id = id,
-    this.firstName = firstName,
-    this.lastName= lastName,
-    this.age = age,
-    this.eyeColor = eyeColor,
-    this.isActive = isActive,
-    this.classes = classes
+Student = (function () {
+  function Student (studentData) {
+    this.id = studentData.id;
+    this.firstName = studentData.firstName;
+    this.lastName= studentData.lastName;
+    this.age = studentData.age;
+    this.eyeColor = studentData.eyeColor;
+    this.isActive = studentData.isActive;
+    this.classes = studentData.classes;
   }
   
-  toString () {
-    return `(${this.id}) ${this.firstName} ${this.lastName}`;
+  Student.prototype.toString = function () {
+    return '(' + this.id + ') ' + this.firstName + ' ' + this.lastName;
   }
   
-  log () {
+  Student.prototype.log = function () {
     console.log(this.toString());
   }
-}
+  
+  return Student;
+})();
 ```
 
 Tak wyglądają dane naszych studentów.
