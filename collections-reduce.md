@@ -8,16 +8,16 @@ Obliczmy sumę wieku studentów.
 
 Ponownie zaczniemy od wykorzystania metody `Array.forEach()`.
 
-##### [Przykład 2.3.1](https://codepen.io/mmotel/pen/YQppNZ)
+##### [Przykład 2.3.1](https://codepen.io/mmotel/pen/eRoRYq)
 
 ```js
-let sumOfAges = 0;
+var sumOfAges = 0;
 
-students.forEach(student => {
+students.forEach(function (student) {
   sumOfAges += student.age;
 });
 
-console.log(sumOfAges); // -> 110
+console.log(sumOfAges); // -> 112
 ```
 
 Uzyskaliśmy uproszczoną implementację metody `Array.reduce()`. Jako parametr przyjmuje ona funckję, do której przekazuje `akumulator` oraz kolejne wartości tablicy. Drugim opcjonalnym parametrem metody `Array.reduce()` jest wartość początkowa `akumulatora`.
@@ -25,24 +25,26 @@ Uzyskaliśmy uproszczoną implementację metody `Array.reduce()`. Jako parametr 
 ##### [Przykład 2.3.2](https://codepen.io/mmotel/pen/KqNNmJ)
 
 ```js
-let sumOfAges = students
-  .reduce((acc, student) => acc += student.age, 0);
+var sumOfAges = students
+  .reduce(function (acc, student) { return acc += student.age; }, 0);
 
-console.log(sumOfAges);
+console.log(sumOfAges); // -> 112
 ```
 
 Wykorzystując metodę `Array.reduce()` możemy łatwo odnaleźć najwyższą wartość wieku studentów.
 
-##### [Przykład 2.3.3](https://codepen.io/mmotel/pen/YQppEQ)
+##### [Przykład 2.3.3](https://codepen.io/mmotel/pen/OgGgVZ)
 
 ```js
-let maxAge = students
+var maxAge = students
   .reduce(
-    (acc, student) => acc && acc >= student.age ? acc : student.age,
+    function (acc, student) {
+      return acc && acc >= student.age ? acc : student.age; 
+    },
     null
   );
 
-console.log(maxAge); // -> 26
+console.log(maxAge);// -> 26
 ```
 
 Możemy również przekształcić tablicę w obiekt pełniący rolę słownika. 
@@ -50,9 +52,9 @@ Możemy również przekształcić tablicę w obiekt pełniący rolę słownika.
 ##### [Przykład 2.3.4](https://codepen.io/mmotel/pen/OgbbvE)
 
 ```js
-let studentsDict = students
+var studentsDict = students
   .reduce(
-    (acc, student) => { 
+    function (acc, student) { 
       acc[student.id] = student; 
       return acc; 
     }, 
