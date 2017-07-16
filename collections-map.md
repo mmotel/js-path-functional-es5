@@ -6,7 +6,7 @@ Mapowanie pozwala przekształcić tablicę wartości na tablicę innych wartośc
 
 Przekształćmy tablicę studentów na tablicę ich imion oraz nazwisk.
 
-Zaczniemy od wykorzystania pętli `for-of`.
+Zaczniemy od wykorzystania pętli `for`.
 
 ##### [Przykład 2.1.1](https://codepen.io/mmotel/pen/OgGmRW)
 ```js
