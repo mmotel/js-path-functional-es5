@@ -81,13 +81,13 @@ Wyciągnijmy z tablicy studentów imiona, które zawierają w sobie literę `n`.
 
 Możemy to zrobić korzystając z metody `Array.forEach()`.
 
-##### [Przykład 2.2.5](https://codepen.io/mmotel/pen/XgNKpM)
+##### [Przykład 2.2.5](https://codepen.io/mmotel/pen/Ngmjoz)
 ```js
-let namesWithN = [];
+var namesWithN = [];
     
 students.forEach(student => {
-  let name = student.firstName;
-  if (name.toLowerCase().indexOf('n') > 0) {
+  var name = student.firstName;
+  if (name.toLowerCase().indexOf('n') > -1) {
     namesWithN.push(name);
   }
 });
@@ -98,17 +98,15 @@ console.log(namesWithN);
 
 Jednak o wiele lepiej będzie skorzystać z metod `Array.map()` i `Array.filter()`.
 
-##### [Przykład 2.2.6](https://codepen.io/mmotel/pen/GENqqw)
+##### [Przykład 2.2.6](https://codepen.io/mmotel/pen/VWNbRm)
 ```js
-let namesWithN = students
-  .map(student => student.firstName)
-  .filter(name => name.toLowerCase().indexOf('n') > 0);
+var namesWithN = students
+  .map(function (student) { return student.firstName; })
+  .filter(function (name) { return name.toLowerCase().indexOf('n') > -1; });
 
 console.log(namesWithN);
 // -> ["Christina", "Austin", "Hawkins"]
 ```
-
-task 
 
 ---
 
