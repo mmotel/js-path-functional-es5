@@ -54,7 +54,7 @@ console.log(names);
 
 Korzystając z `Array.map()` oraz zbiorów (`Set`) możemy łatwo i szybko wyciągnąć z tablicy zbiór występujących wartości danego pola.
 
-Wyciągnijmy zbiór kolorów oczy studentów.
+Wyciągnijmy zbiór kolorów oczu studentów.
 
 ##### [Przykład 2.1.4](https://codepen.io/mmotel/pen/dRLWzo)
 ```js
