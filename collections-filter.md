@@ -6,30 +6,32 @@ Filtorwanie pozwala wyciągnąć z tablicy te wartości, które spełniają zada
 
 Wyciągnijmy z listy studentów tych, którzy są aktywni.
 
-Zaczniemy od wykorzystania pętli `for-of`.
+Zaczniemy od wykorzystania pętli `for`.
 
-##### [Przykład 2.2.1](https://codepen.io/mmotel/pen/NgbNpL)
+##### [Przykład 2.2.1](https://codepen.io/mmotel/pen/eRoWeb)
 ```js
-let activeStudents = [];
+var activeStudents = [],
+    student;
 
-for (let student of students) {
+for (var i = 0; i < students.length; i += 1) {
+  student = students[i];
   if (student.isActive) {
     activeStudents.push(student);
   }
 }
 
-console.log(activeStudents);
+log(activeStudents);
 // -> (0) Christina Richmond
 // -> (2) Viola Shelton
 ```
 
 Ponownie uprościmy implementację wykorzystując metodę `Array.forEach()`.
 
-##### [Przykład 2.2.2](https://codepen.io/mmotel/pen/MobyQN)
+##### [Przykład 2.2.2](https://codepen.io/mmotel/pen/MoRmQz)
 ```js
-let activeStudents = [];
+var activeStudents = [];
 
-students.forEach(student => {
+students.forEach(function (student) {
   if (student.isActive) {
     activeStudents.push(student);
   }
@@ -42,9 +44,10 @@ log(activeStudents);
 
 Uzyskaliśmy uproszczoną implementację metody `Array.filter()`. Przyjmuje ona jako parametr funckję, która sprawdza czy element spełnia zadany warunek.
 
-##### [Przykład 2.2.3](https://codepen.io/mmotel/pen/YQpqLr)
+##### [Przykład 2.2.3](https://codepen.io/mmotel/pen/QgPvrr)
 ```js
-let activeStudents = students.filter(student => student.isActive);
+var activeStudents = students
+  .filter(function (student) { return student.isActive; });
 
 log(activeStudents);
 // -> (0) Christina Richmond
@@ -55,10 +58,14 @@ Możemy również zagnieżdżać filtrowanie aby uzyskać nieco bardziej skompli
 
 Wyciągnijmy z listy studentów tych, którzy uczęszczają do klasy `1B`.
 
-##### [Przykład 2.2.4](https://codepen.io/mmotel/pen/qjqZKR)
+##### [Przykład 2.2.4](https://codepen.io/mmotel/pen/JJVNBo)
 ```js
-let studentsFrom1B = students
-  .filter(student => student.classes.filter(c => c === '1B').length > 0);
+var studentsFrom1B = students
+  .filter(function (student) { 
+    return student.classes
+      .filter(function (c) { return c === '1B'; })
+      .length > 0; 
+  });
 
 log(studentsFrom1B);
 // -> (1) Austin Wooten
