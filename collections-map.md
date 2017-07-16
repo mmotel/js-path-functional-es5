@@ -8,12 +8,14 @@ Przekształćmy tablicę studentów na tablicę ich imion oraz nazwisk.
 
 Zaczniemy od wykorzystania pętli `for-of`.
 
-##### [Przykład 2.1.1](https://codepen.io/mmotel/pen/mwOeoN)
+##### [Przykład 2.1.1](https://codepen.io/mmotel/pen/OgGmRW)
 ```js
-let names = [];
+var names = [], 
+    student;
 
-for (let student of students) {
-  names.push(`${student.firstName} ${student.lastName}`);
+for (var i = 0; i < students.length; i += 1) {
+  student = students[i];
+  names.push(student.firstName + ' ' + student.lastName);
 }
 
 console.log(names);
@@ -23,12 +25,12 @@ console.log(names);
 
 Możemy uprościć implementację wykorzystując metodę `Array.forEach()`.
 
-##### [Przykład 2.1.2](https://codepen.io/mmotel/pen/VWmeEv)
+##### [Przykład 2.1.2](https://codepen.io/mmotel/pen/Ngmjda)
 ```js
-let names = [];
+var names = [];
 
-students.forEach(student => {
-  names.push(`${student.firstName} ${student.lastName}`);
+students.forEach(function (student) {
+  names.push(student.firstName + ' ' + student.lastName);
 });
 
 console.log(names);
@@ -38,10 +40,12 @@ console.log(names);
 
 To co udało nam się osiągnąć jest uproszczoną iplementacją metody `Array.map()`. Przyjmuje ona jako argument funckję, która wykona mapowanie wartości.
 
-##### [Przykład 2.1.3](https://codepen.io/mmotel/pen/rwWxQP)
+##### [Przykład 2.1.3](https://codepen.io/mmotel/pen/rwbmmo)
 ```js
-let names = students
-  .map(student => `${student.firstName} ${student.lastName}`);
+var names = students
+  .map(function (student) { 
+    return student.firstName + ' ' + student.lastName 
+  });
 
 console.log(names);
 // -> ["Christina Richmond", "Austin Wooten", 
@@ -52,14 +56,17 @@ Korzystając z `Array.map()` oraz zbiorów (`Set`) możemy łatwo i szybko wyci�
 
 Wyciągnijmy zbiór kolorów oczy studentów.
 
-##### [Przykład 2.1.4](https://codepen.io/mmotel/pen/pwNgBO)
+##### [Przykład 2.1.4](https://codepen.io/mmotel/pen/dRLWzo)
 ```js
-let eyeColors = students.map(student => student.eyeColor);
+var eyeColors, uniqueEyeColors;
+
+eyeColors = students
+  .map(function (student) { return student.eyeColor; });
 
 console.log(eyeColors);
 // -> ["green", "blue", "blue", "brown", "blue"]
 
-let uniqueEyeColors = new Set(eyeColors);
+uniqueEyeColors = new Set(eyeColors);
 
 console.log(uniqueEyeColors);
 // -> Set {"green", "blue", "brown"}
