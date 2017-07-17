@@ -52,7 +52,7 @@ console.log(names);
 //     "Viola Shelton", "Marisol Sargent", "Hawkins Everett"]
 ```
 
-Korzystając z `Array.map()` oraz zbiorów (`Set`) możemy łatwo i szybko wyciągnąć z tablicy zbiór występujących wartości danego pola.
+Korzystając z `Array.map()` oraz metody [`uniq()`](https://lodash.com/docs/#uniq) z biblioteki [`Lodash`](https://lodash.com) możemy łatwo i szybko wyciągnąć z tablicy zbiór występujących wartości danego pola.
 
 Wyciągnijmy zbiór kolorów oczu studentów.
 
@@ -66,10 +66,10 @@ eyeColors = students
 console.log(eyeColors);
 // -> ["green", "blue", "blue", "brown", "blue"]
 
-uniqueEyeColors = new Set(eyeColors);
+uniqueEyeColors = _.uniq(eyeColors);
 
 console.log(uniqueEyeColors);
-// -> Set {"green", "blue", "brown"}
+// -> ["green", "blue", "brown"]
 ```
 
 ---
