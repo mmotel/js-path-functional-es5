@@ -96,10 +96,10 @@ console.log(allClasses);
 // -> ["1A", "Art", "1B", "Science", "1A", "Science", 
 //     "1B", "Music", "1B", "Art", "Music"]
 
-uniqueClasses = new Set(allClasses);
+uniqueClasses = _.uniq(allClasses);
 
 console.log(uniqueClasses);
-// -> Set {"1A", "Art", "1B", "Science", "Music"}
+// -> ["1A", "Art", "1B", "Science", "Music"]
 ```
 
 O wiele prościej będzie wykorzystać `Array.map()` oraz `Array.reduce()`.
@@ -111,17 +111,17 @@ var allClasses,
     uniqueClasses;
 
 allClasses = students
-  .map(student => student.classes)
-  .reduce((acc, classes) => acc.concat(classes), []);
+  .map(function (student) { return student.classes; })
+  .reduce(function (acc, classes) { return acc.concat(classes); }, []);
 
 console.log(allClasses);
 // -> ["1A", "Art", "1B", "Science", "1A", "Science", 
 //     "1B", "Music", "1B", "Art", "Music"]
 
-uniqueClasses = new Set(allClasses);
+uniqueClasses = _.uniq(allClasses);
 
 console.log(uniqueClasses);
-// -> Set {"1A", "Art", "1B", "Science", "Music"}
+// -> ["1A", "Art", "1B", "Science", "Music"]
 ```
 
 ## Połączenie mapowania, filtrowania oraz redukowania
@@ -185,7 +185,9 @@ function map (array, mapper) {
   []);
 }
 
-studentAges = map(students, function (student) { return student.age; });
+studentAges = map(students, function (student) { 
+  return student.age; 
+});
 
 console.log(studentAges);
 // -> [19, 21, 20, 26, 24]
@@ -207,7 +209,9 @@ function filter (array, condition) {
   );
 }
 
-adultStudents = filter(students, function (student) { return student.age >= 21; });
+adultStudents = filter(students, function (student) { 
+  return student.age >= 21; 
+});
 
 log(adultStudents);
 // -> (1) Austin Wooten
