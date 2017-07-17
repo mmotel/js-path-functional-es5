@@ -80,13 +80,14 @@ Wyciągnijmy z listy studentów listę klas do których uczęszczają.
 
 Rozpoczniemy od wersji z wykorzystaniem `Array.forEach()`.
 
-##### [Przykład 2.3.5](https://codepen.io/mmotel/pen/OgbWze)
+##### [Przykład 2.3.5](https://codepen.io/mmotel/pen/mwYJOe)
 
 ```js
-let allClasses = [];
+var allClasses = [],
+    uniqueClasses;
 
-students.forEach(student => {
-  student.classes.forEach(c => {
+students.forEach(function (student) {
+  student.classes.forEach(function (c) {
     allClasses.push(c);
   });
 });
@@ -95,7 +96,7 @@ console.log(allClasses);
 // -> ["1A", "Art", "1B", "Science", "1A", "Science", 
 //     "1B", "Music", "1B", "Art", "Music"]
 
-let uniqueClasses = new Set(allClasses);
+uniqueClasses = new Set(allClasses);
 
 console.log(uniqueClasses);
 // -> Set {"1A", "Art", "1B", "Science", "Music"}
@@ -103,18 +104,21 @@ console.log(uniqueClasses);
 
 O wiele prościej będzie wykorzystać `Array.map()` oraz `Array.reduce()`.
 
-##### [Przykład 2.3.6](https://codepen.io/mmotel/pen/MobJXp)
+##### [Przykład 2.3.6](https://codepen.io/mmotel/pen/PjvqKb)
 
 ```js
-let allClasses = students
+var allClasses,
+    uniqueClasses;
+
+allClasses = students
   .map(student => student.classes)
   .reduce((acc, classes) => acc.concat(classes), []);
 
 console.log(allClasses);
 // -> ["1A", "Art", "1B", "Science", "1A", "Science", 
-//     "1B", "Music", "1B", "Art", "Music"] 
+//     "1B", "Music", "1B", "Art", "Music"]
 
-let uniqueClasses = new Set(allClasses);
+uniqueClasses = new Set(allClasses);
 
 console.log(uniqueClasses);
 // -> Set {"1A", "Art", "1B", "Science", "Music"}
@@ -128,14 +132,14 @@ Wyciągnijmy z tablicy studentów napis zawierający imiona i nazwiska dorosłyc
 
 Implementacja z wykorzystaniem `Array.forEach()` nie jest zbyt skomplikowana.
 
-##### [Przykład 2.3.7](https://codepen.io/mmotel/pen/KqNaEa)
+##### [Przykład 2.3.7](https://codepen.io/mmotel/pen/owRXpN)
 
 ```js
-let adultsNames = '';
+var adultsNames = '';
 
-students.forEach(student => {
+students.forEach(function (student) {
   if (student.age >= 21) {
-    adultsNames += `${student.firstName} ${student.lastName}, `;
+    adultsNames += student.firstName + ' ' + student.lastName + ', ';
   }
 });
 
@@ -145,13 +149,19 @@ console.log(adultsNames);
 
 Jednak wersja z `Array.map()`, `Array.filter()` oraz `Array.reduce()` jest znacznie łatwiejsza w utrzymaniu.
 
-##### [Przykład 2.3.8](https://codepen.io/mmotel/pen/owYBRJ)
+##### [Przykład 2.3.8](https://codepen.io/mmotel/pen/jwoPZZ)
 
 ```js
-let adultsNames = students
-  .filter(student => student.age >= 21)
-  .map(student => `${student.firstName} ${student.lastName}`)
-  .reduce((acc, name) => acc ? `${acc}, ${name}` : name, '');
+var adultsNames = students
+  .filter(function (student) { 
+    return student.age >= 21; 
+  })
+  .map(function (student) { 
+    return student.firstName + ' ' + student.lastName; 
+  })
+  .reduce(function (acc, name) { 
+    return acc ? acc + ', ' + name : name; 
+  }, '');
 
 console.log(adultsNames);
 // -> 'Austin Wooten, Marisol Sargent, Hawkins Everett'
@@ -163,15 +173,19 @@ console.log(adultsNames);
 
 Zaimplementujmy mapowanie poprzez redukcję.
 
-##### [Przykład 2.3.9](https://codepen.io/mmotel/pen/OgbpmX)
+##### [Przykład 2.3.9](https://codepen.io/mmotel/pen/ZyNGRq)
 
 ```js
+var studentAges;
+
 function map (array, mapper) {
-  return array
-    .reduce((acc, item) => acc.concat([mapper(item)]), []);
+  return array.reduce(function (acc, item) { 
+    return acc.concat([ mapper(item) ]); 
+  }, 
+  []);
 }
 
-let studentAges = map(students, student => student.age);
+studentAges = map(students, function (student) { return student.age; });
 
 console.log(studentAges);
 // -> [19, 21, 20, 26, 24]
@@ -179,17 +193,21 @@ console.log(studentAges);
 
 Analogicznie możemy zaimplementować filtrowanie.
 
-##### [Przykład 2.3.10](https://codepen.io/mmotel/pen/vZyxeE)
+##### [Przykład 2.3.10](https://codepen.io/mmotel/pen/LLoVJE)
 
 ```js
+var adultStudents;
+
 function filter (array, condition) {
   return array.reduce(
-    (acc, item) => condition(item) ? acc.concat([item]) : acc, 
+    function (acc, item) { 
+      return condition(item) ? acc.concat([item]) : acc 
+    }, 
     []
   );
 }
 
-let adultStudents = filter(students, student => student.age >= 21);
+adultStudents = filter(students, function (student) { return student.age >= 21; });
 
 log(adultStudents);
 // -> (1) Austin Wooten
