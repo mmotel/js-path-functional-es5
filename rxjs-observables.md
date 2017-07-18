@@ -204,16 +204,18 @@ Rx.Observable.fromEvent(window, 'mousemove')
 
 Zawsze musimy się liczyć, że coś może pójść nie po naszej myśli. Aby zabezpieczyć się przed błędami, które mogą pojawić się w czasie przetwarzania stumienia wykorzystamy metodę `Rx.Observable.catch()`. 
 
-##### [Przykład 2.10](https://codepen.io/mmotel/pen/mwMWqL)
+##### [Przykład 2.10](https://codepen.io/mmotel/pen/KqLjeE)
 ```js
 Rx.Observable.fromEvent(window, 'mousemove')
-   .map(event => ({
-      x: event.clientX, 
-      y: event.clientY, 
-      z: event.client.zIndex
-   }))
-   .catch(error => { 
-      console.log(`catched error: ${error.message}`); 
+   .map(function (event) { 
+      return {
+         x: event.clientX, 
+         y: event.clientY, 
+         z: event.client.zIndex
+      };
+   })
+   .catch(function (error) { 
+      console.log('catched error: ' + error.message); 
       return Rx.Observable.of({x: 0, y:0, z: 0}); 
    })
    .subscribe(observer);
