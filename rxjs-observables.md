@@ -34,11 +34,11 @@ Jest ona rozwijana przez _Microsoft_ ze wsparciem społeczności.
 
 Typ `Rx.Observable` reprezentuje obserwowalny strumień. Dzięki niemu możemy pracować z dowolnym typem danych w ten sam sposób ponieważ są one przekształcane w strumień. Typ `Rx.Observable` łączy świat programowania funkcyjnego i raektywnego. 
     
-##### [Przykład 3.1](https://codepen.io/mmotel/pen/gRRNbM)
+##### [Przykład 3.1](https://codepen.io/mmotel/pen/owRRzV)
 ```js
 Rx.Observable.from([1, 2, 3, 4])
-   .subscribe(item => { 
-      console.log(`item: ${item}`); 
+   .subscribe(function (item) { 
+      console.log('item: ' + item); 
    });
 // -> 'item: 1'
 // -> 'item: 2'
@@ -50,12 +50,12 @@ Metoda `Rx.Observable.from()` pozwala stworzyć strumień z tablicy, który emit
     
 Metoda `Observable.subscribe()` przyjmuje jako parametr trzy funkcje.
     
-##### [Przykład 3.2](https://codepen.io/mmotel/pen/weeLJq)
+##### [Przykład 3.2](https://codepen.io/mmotel/pen/LLoobq)
 ```js
-let observer = {
-   next: item => { console.log(`next: ${item}`); },
-   error: err => { console.log(`error: ${err}`); },
-   complete: () => { console.log(`complete`) }
+var observer = {
+   next: function (item) { console.log('next: ' + item); },
+   error: function (err) { console.log('error: ' + err); },
+   complete: function () { console.log(`complete`); }
 };
 
 Rx.Observable.from([1, 2, 3, 4])
@@ -85,10 +85,10 @@ Operator `Rx.Observable.map()` pozwala na mapowanie wartości elementów strumie
  
 ![](/assets/stream_map.png)
  
-##### [Przykład 3.3](https://codepen.io/mmotel/pen/jwwjwx)
+##### [Przykład 3.3](https://codepen.io/mmotel/pen/webbdz)
 ```js
 Rx.Observable.from([1, 2, 3, 4])
-   .map(item => item * item)
+   .map(function (item) { return item * item; })
    .subscribe(observer);
 // -> 'next: 1'
 // -> 'next: 4'
@@ -103,10 +103,10 @@ Metoda `Rx.Observable.filter()` pozwala na filtrowanie elementów strumienia, po
 
 ![](/assets/stream_filter2.png)
 
-##### [Przykład 3.4](https://codepen.io/mmotel/pen/YQQorW)
+##### [Przykład 3.4](https://codepen.io/mmotel/pen/BZeedL)
 ```js
 Rx.Observable.from([1, 2, 3, 4])
-   .filter(item => item % 2 === 0)
+   .filter(function (item) { return item % 2 === 0; })
    .subscribe(observer);
 // -> 'next: 2'
 // -> 'next: 4'
@@ -118,10 +118,10 @@ Rx.Observable.from([1, 2, 3, 4])
 
 Pozwala na wykonanie zadanej akcji bez wypływania na elementy strumienia. Możemy go wykorzystać do wypisania wartości elementu na przykład podczas debugowania.
 
-##### [Przykład 3.5](https://codepen.io/mmotel/pen/KqqjyB)
+##### [Przykład 3.5](https://codepen.io/mmotel/pen/RgmmjN)
 ```js
 Rx.Observable.from([1, 2, 3, 4])
-   .do(item => { console.log(`do: ${item}`); })
+   .do(function (item) { console.log('do: ' + item); })
    .subscribe(observer);
 // -> 'do: 1'
 // -> 'next: 1'
@@ -140,14 +140,14 @@ Operator `Rx.Observable.merge()` pozwala scalić dwa strumienie zdarzeń w jeden
 
 ![](/assets/stream_merge.png)
 
-##### [Przykład 3.6](https://codepen.io/mmotel/pen/KqqjyB)
+##### [Przykład 3.6](https://codepen.io/mmotel/pen/BZeeOW)
 ```js
-let stream1$ = Rx.Observable.from([1, 2, 3, 4]);
-let stream2$ = Rx.Observable.from(['a', 'b', 'c']);
+var stream1$ = Rx.Observable.from([1, 2, 3, 4]),
+    stream2$ = Rx.Observable.from(['a', 'b', 'c']);
 
 stream1$
    .merge(stream2$)
-   .subscribe(observer);
+   .subscribe(observer); 
 // -> 'next: 1'
 // -> 'next: 2'
 // -> 'next: 3'
@@ -162,7 +162,7 @@ stream1$
 
 Operator `Rx.Observable.take()` pozwala ograniczyć ilość elementów pobieranych ze strumienia i jego zakończenie.
 
-##### [Przykład 3.7](https://codepen.io/mmotel/pen/dRRBwp)
+##### [Przykład 3.7](https://codepen.io/mmotel/pen/Xgwwxy)
 ```js
 Rx.Observable.from([1, 2, 3, 4])
    .take(2)
@@ -180,7 +180,7 @@ Aby stworzyć strumienień ze zdarzeń skorzystamy z metody `Rx.Observable.fromE
 
 Utworzymy strumień ze zdarzeń `mousemove`, które są wyzwalane na elemencie `window`.
 
-##### [Przykład 2.8](https://codepen.io/mmotel/pen/RggzzZ)
+##### [Przykład 2.8](https://codepen.io/mmotel/pen/rwggoQ)
 ```js
 Rx.Observable.fromEvent(window, 'mousemove')
    .subscribe(observer);
@@ -188,11 +188,15 @@ Rx.Observable.fromEvent(window, 'mousemove')
 
 Jednak interesują nas jedynie te ruchy myszy, które odbywają się w kwadracie 200 na 200 pikseli w lewym górnym rogu ekranu. Skorzystamy z mapowania i filtrowania strumieni aby ograniczyć zdarzenia tylko do tego obszaru.
 
-##### [Przykład 2.9](https://codepen.io/mmotel/pen/gRRNVo)
+##### [Przykład 2.9](https://codepen.io/mmotel/pen/mwYZVW)
 ```js
 Rx.Observable.fromEvent(window, 'mousemove')
-   .map(event => ({x: event.clientX, y: event.clientY}))
-   .filter(position => position.x < 200 && position.y < 200)
+   .map(function (event) {
+      return {x: event.clientX, y: event.clientY};
+   })
+   .filter(function (pointer) { 
+      return pointer.x < 200 && pointer.y < 200; 
+   })
    .subscribe(observer);
 ```
 
