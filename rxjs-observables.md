@@ -16,7 +16,7 @@ Opisana powyżej komunikacja obiektów _A_ i _B_ przez specjalny interfejs jest 
 
 W przypadku aplikacji wszystkie występujące zdarzenia mogą być traktowane jako strumień zdarzeń. Użytkownik klika przycisk - zdarzenie. Kursor myszy jest umieszczany w pewnym obszarze - zdarzenie. Zmienia się czas na zegarze - zdarzenie. Taki strumień zdarzeń jest dostawcą danych.
 
-W programowaniu reaktywnym wszyscy dostawcy danych są ujednoliceni i przedstawiani jako obserwowalny strumień. Strumień to sekwencja uporządkowanych zdarzeń zachodzących w czasie. 
+W programowaniu reaktywnym wszyscy dostawcy danych są ujednoliceni i przedstawiani jako obserwowalny strumień. Strumień to sekwencja uporządkowanych zdarzeń zachodzących w czasie.
 
 Aby pobrać wartość ze strumienia, trzeba go zasubskrybować. Obiekt subskrybowalny to dowolny obiekt z danymi, który implementuje wzorzec obserwatora.
 
@@ -24,7 +24,7 @@ W przypadku obserwowalnego strumienia zdarzeń najprościej nie myśleć o nim j
 
 ## RxJS
 
-[RxJS](http://reactivex.io/rxjs/) (_Reactive Extensions for JavaScript_) jest reaktywną biblioteką, która umożliwia zgrabne łączenie kodu asynchronicznego i opartego na zdarzeniach. Zapewnia ona wysoki poziom abstrakcji i wiele operacji dających dodatkowe możliwości.
+[RxJS](http://reactivex.io/rxjs/) \(_Reactive Extensions for JavaScript_\) jest reaktywną biblioteką, która umożliwia zgrabne łączenie kodu asynchronicznego i opartego na zdarzeniach. Zapewnia ona wysoki poziom abstrakcji i wiele operacji dających dodatkowe możliwości.
 
 > Think of RxJS as [Lodash](https://lodash.com) for events.
 
@@ -32,9 +32,16 @@ Jest ona rozwijana przez _Microsoft_ ze wsparciem społeczności.
 
 ### Observable
 
-Typ `Rx.Observable` reprezentuje obserwowalny strumień. Dzięki niemu możemy pracować z dowolnym typem danych w ten sam sposób ponieważ są one przekształcane w strumień. Typ `Rx.Observable` łączy świat programowania funkcyjnego i raektywnego. 
-    
+Typ `Rx.Observable` reprezentuje obserwowalny strumień. Dzięki niemu możemy pracować z dowolnym typem danych w ten sam sposób ponieważ są one przekształcane w strumień. Typ `Rx.Observable` łączy świat programowania funkcyjnego i raektywnego.
+
+`Observables` wypełniają brakujący element tabeli `pull-push`.
+
+Strategia `pull` zakłada, że producent jest pasywny i zwraca dane gdy konsument o to poprosi. Producent nie wie kiedy będzie działał, pełna kontrola leży po stronie konsumenta.
+
+Strategia `push` zakłada, że to producent jest aktywny i zwraca dane kiedy _chce_. Konsument jest stroną pasywną i jedynie reaguje na nadejście nowych informacji.![](/assets/push-pull-single-multiple.png)
+
 ##### [Przykład 3.1](https://codepen.io/mmotel/pen/owRRzV)
+
 ```js
 Rx.Observable.from([1, 2, 3, 4])
    .subscribe(function (item) { 
@@ -45,12 +52,13 @@ Rx.Observable.from([1, 2, 3, 4])
 // -> 'item: 3'
 // -> 'item: 4'
 ```
-    
+
 Metoda `Rx.Observable.from()` pozwala stworzyć strumień z tablicy, który emituje jej elementy jako kolejne zdarzenia. Aby pobrać elementy ze strumienia korszystamy z metody `Observable.subscribe()` i przekazujemy do niej _callback_ nazywany też _Observer-em_.
-    
+
 Metoda `Observable.subscribe()` przyjmuje jako parametr trzy funkcje.
-    
+
 ##### [Przykład 3.2](https://codepen.io/mmotel/pen/LLoobq)
+
 ```js
 var observer = {
    next: function (item) { console.log('next: ' + item); },
@@ -67,25 +75,26 @@ Rx.Observable.from([1, 2, 3, 4])
 // -> 'complete'
 ```
 
-Pierwsza z funkcji - _next_ - odpowiada za obsługę kolejnych elementów strumienia. 
+Pierwsza z funkcji - _next_ - odpowiada za obsługę kolejnych elementów strumienia.
 
 Druga - _error_ - za zakończenie przetwarzania spowodowane błędem.
 
 Trzecia - _complete_ -za zakończenie przetwarzania strumienia.
 
-Możemy podać dowolną ilość funkcji, jednak zawsze trzeba pamiętać o ich kolejności. 
+Możemy podać dowolną ilość funkcji, jednak zawsze trzeba pamiętać o ich kolejności.
 
 ### Operatory
 
 Biblioteka `RxJS` zapewnia zbiór operatorów do przetwarzania strumieni, część z nich znamy już z przetwarzania kolekcji - _map_, _filter_.
 
 ##### Mapowanie strumienia
-    
+
 Operator `Rx.Observable.map()` pozwala na mapowanie wartości elementów strumienia podobnie jak metoda `Array.map()`.
- 
+
 ![](/assets/stream_map.png)
- 
+
 ##### [Przykład 3.3](https://codepen.io/mmotel/pen/webbdz)
+
 ```js
 Rx.Observable.from([1, 2, 3, 4])
    .map(function (item) { return item * item; })
@@ -104,6 +113,7 @@ Metoda `Rx.Observable.filter()` pozwala na filtrowanie elementów strumienia, po
 ![](/assets/stream_filter2.png)
 
 ##### [Przykład 3.4](https://codepen.io/mmotel/pen/BZeedL)
+
 ```js
 Rx.Observable.from([1, 2, 3, 4])
    .filter(function (item) { return item % 2 === 0; })
@@ -111,14 +121,14 @@ Rx.Observable.from([1, 2, 3, 4])
 // -> 'next: 2'
 // -> 'next: 4'
 // -> 'complete'
-
 ```
-  
-##### Operator `Rx.Observable.do()` 
+
+##### Operator `Rx.Observable.do()`
 
 Pozwala na wykonanie zadanej akcji bez wypływania na elementy strumienia. Możemy go wykorzystać do wypisania wartości elementu na przykład podczas debugowania.
 
 ##### [Przykład 3.5](https://codepen.io/mmotel/pen/RgmmjN)
+
 ```js
 Rx.Observable.from([1, 2, 3, 4])
    .do(function (item) { console.log('do: ' + item); })
@@ -141,13 +151,14 @@ Operator `Rx.Observable.merge()` pozwala scalić dwa strumienie zdarzeń w jeden
 ![](/assets/stream_merge.png)
 
 ##### [Przykład 3.6](https://codepen.io/mmotel/pen/BZeeOW)
+
 ```js
 var stream1$ = Rx.Observable.from([1, 2, 3, 4]),
     stream2$ = Rx.Observable.from(['a', 'b', 'c']);
 
 stream1$
    .merge(stream2$)
-   .subscribe(observer); 
+   .subscribe(observer); 
 // -> 'next: 1'
 // -> 'next: 2'
 // -> 'next: 3'
@@ -163,6 +174,7 @@ stream1$
 Operator `Rx.Observable.take()` pozwala ograniczyć ilość elementów pobieranych ze strumienia i jego zakończenie.
 
 ##### [Przykład 3.7](https://codepen.io/mmotel/pen/Xgwwxy)
+
 ```js
 Rx.Observable.from([1, 2, 3, 4])
    .take(2)
@@ -181,6 +193,7 @@ Aby stworzyć strumienień ze zdarzeń skorzystamy z metody `Rx.Observable.fromE
 Utworzymy strumień ze zdarzeń `mousemove`, które są wyzwalane na elemencie `window`.
 
 ##### [Przykład 2.8](https://codepen.io/mmotel/pen/rwggoQ)
+
 ```js
 Rx.Observable.fromEvent(window, 'mousemove')
    .subscribe(observer);
@@ -189,6 +202,7 @@ Rx.Observable.fromEvent(window, 'mousemove')
 Jednak interesują nas jedynie te ruchy myszy, które odbywają się w kwadracie 200 na 200 pikseli w lewym górnym rogu ekranu. Skorzystamy z mapowania i filtrowania strumieni aby ograniczyć zdarzenia tylko do tego obszaru.
 
 ##### [Przykład 2.9](https://codepen.io/mmotel/pen/mwYZVW)
+
 ```js
 Rx.Observable.fromEvent(window, 'mousemove')
    .map(function (event) {
@@ -202,9 +216,10 @@ Rx.Observable.fromEvent(window, 'mousemove')
 
 ##### Obsługa błędów
 
-Zawsze musimy się liczyć, że coś może pójść nie po naszej myśli. Aby zabezpieczyć się przed błędami, które mogą pojawić się w czasie przetwarzania stumienia wykorzystamy metodę `Rx.Observable.catch()`. 
+Zawsze musimy się liczyć, że coś może pójść nie po naszej myśli. Aby zabezpieczyć się przed błędami, które mogą pojawić się w czasie przetwarzania stumienia wykorzystamy metodę `Rx.Observable.catch()`.
 
 ##### [Przykład 2.10](https://codepen.io/mmotel/pen/KqLjeE)
+
 ```js
 Rx.Observable.fromEvent(window, 'mousemove')
    .map(function (event) { 
@@ -225,11 +240,12 @@ Pozwala ona na obsłużenie błędu i przekazanie do subskrybenta innej wartośc
 
 ### Tworzenie obiektów typu `Rx.Observable`
 
-Poznaliśmy już kilka sposobów na utworzenie strumienia. `Rx.Observable.from()` pozwala utworzyć strumień z obiektu iterowalnego. `Rx.Observable.fromEvent()` ze zdarzeń a `Rx.Observable.of()` ` pojedynczej wartości. Biblioteka `RxJS` dostarcza jeszcze wiele przydatnych metod pozwalających na tworzenie strumieni.
+Poznaliśmy już kilka sposobów na utworzenie strumienia. `Rx.Observable.from()` pozwala utworzyć strumień z obiektu iterowalnego. `Rx.Observable.fromEvent()` ze zdarzeń a `Rx.Observable.of()` `pojedynczej wartości. Biblioteka`RxJS\` dostarcza jeszcze wiele przydatnych metod pozwalających na tworzenie strumieni.
 
-Przyjrzyjmy się jak samemu utworzyć strumień. Pozwala na to metoda  `Rx.Observable.create()`. Przyjmuje ona jako parametr funkcję, która jest odpowiedzialna za generowanie elementów strumienia i jego ewentualne zakończenie - nazywaną _subscribe_. 
+Przyjrzyjmy się jak samemu utworzyć strumień. Pozwala na to metoda  `Rx.Observable.create()`. Przyjmuje ona jako parametr funkcję, która jest odpowiedzialna za generowanie elementów strumienia i jego ewentualne zakończenie - nazywaną _subscribe_.
 
 ##### [Przykład 3.11](https://codepen.io/mmotel/pen/owrazQ)
+
 ```js
 Rx.Observable.create(function (observer) {
    observer.next(1);
@@ -252,6 +268,7 @@ Funkcja _subscribe_ przyjmuje jako argument obiekt _observer_, który podobnie j
 Podczas obsługi asynchronicznych akcji, na przykład komunikacji z serwerem, zdarza się, że chcemy jednocześnie wykonać kilka strumieni. Pozwala na to metoda `Rx.Observable.forkJoin()`, która subskrybuje kilka strumieni, agreguje ostatnie zwrócone przez nie wartości i kończy działanie kiedy wszystkie strumienie zostaną zakończone.
 
 ##### [Przykład 3.12](https://codepen.io/mmotel/pen/dRBgOw)
+
 ```js
 var stream1$, stream2$;
 
@@ -277,6 +294,7 @@ Rx.Observable
 Podczas komunikacji z serwerem często zdarza się tak, że jedno zapytanie jest zależne od drugiego - wymaga zwróconej przez nie wartości. Możemy dokonać _chain-owania_ strumieni wykorzystując metodę `Rx.Observable.flatMap()`.
 
 ##### [Przykład 3.13](https://codepen.io/mmotel/pen/pwXxeP)
+
 ```js
 var stream1$, stream2$;
 
@@ -297,13 +315,116 @@ stream1$
    .subscribe(observer);
 ```
 
+### `Observables` w akcji
+
+##### Pobieranie danych na podstawie wartości pola
+
+Załóżmy, że mamy pole _input_, w którym znajdzie się zapytanie. Chcemy nasłuchiwać na jego zmiany i wykonać akcję tylko gdy długość zapytania jest równa lub większa niż 3.
+
+##### [Przykład 3.14](https://codepen.io/mmotel/pen/XgqRrP)
+
+```js
+let queryInput = document.querySelector('#query');
+
+Rx.Observable.fromEvent(queryInput, 'input')
+.map(event => event.target.value)
+.filter(value => value && value.length >= 3)
+.subscribe(observer);
+```
+
+Gdy zapytanie jest odpowiednie pobieramy dane z API wykorzystując operator `Rx.Observble.ajax()`.
+
+#### [Przykład 3.15](https://codepen.io/mmotel/pen/GEdmWj)
+
+```js
+function search (query) {
+let id = query.split('')
+.map(c => c.charCodeAt(0))
+.reduce((c, acc) => acc + c, 0) % 100 + 1;
+
+return Rx.Observable
+.ajax(`https://jsonplaceholder.typicode.com/posts/${id}`);
+}
+
+let queryInput = document.querySelector('#query');
+
+Rx.Observable.fromEvent(queryInput, 'input')
+.map(event => event.target.value)
+.filter(value => value && value.length >= 3)
+.flatMap(value => search(value))
+.map(response => response.response)
+.subscribe(observer);
+```
+
+Powstaje jednak pewny problem. Kiedy szybko wpisujemy zapytanie to wysyłanych jest wiele żądań i nie wiadomo w jakiej kolejności wrócą. Gdy wpisujemy zapytanie interesuje nas wynik ostatniego z żądań, poprzednie są zbędne i warto byłoby je anulować.
+
+##### [Przykład 3.16](https://codepen.io/mmotel/pen/dReWdY)
+
+```js
+Rx.Observable.fromEvent(queryInput, 'input')
+.map(event => event.target.value)
+.filter(value => value && value.length >= 3)
+.switchMap(value => search(value))
+.map(response => response.response)
+.subscribe(observer);
+```
+
+Operator `Rx.Observable.switchMap()` zwróci nam wynik ostatniego z zapytań. Dodatkowo anuluje poprzednie żądania dzięki czemu nie będziemy niepotrzebnie obciążać serwera.
+
+##### Obsługa kilkania
+
+Załóżmy, że mamy przycisk _Click me!_ i chcemy reagować na kliknięcia w niego.
+
+##### [Przykład 3.17](https://codepen.io/mmotel/pen/YQLVRp)
+
+```js
+let clickMeBtn = document.querySelector('#click-me');
+
+let clicks$ = Rx.Observable.fromEvent(clickMeBtn, 'click');
+
+clicks$.subscribe(observer);
+```
+
+Jednak interesują nas tylko potrójne kliknięcia.
+
+##### [Przykład 3.18](https://codepen.io/mmotel/pen/pwVPBq)
+
+```js
+let clicks$ = Rx.Observable.fromEvent(clickMeBtn, 'click');
+
+clicks$
+.bufferCount(3)
+.subscribe(observer);
+```
+
+Operator `Rx.Observable.bufferCount()` pozwala na buforowanie określonej liczby zdarzeń i zwraca je jako tablicę.
+
+Jednak to jeszcze nie to o co nam chodziło. Potrójne kliknięcie musi odbyć się w krótkim przedziale czasu, na przykład w przeciągu 400 milisekund.
+
+##### [Przykład 3.19](https://codepen.io/mmotel/pen/eRrWww)
+
+```js
+let clicks$ = Rx.Observable.fromEvent(clickMeBtn, 'click');
+
+clicks$
+.bufferWhen(() => clicks$.delay(400))
+.filter(events => events.length >= 3)
+.subscribe(observer);
+```
+
+Operator `Rx.Observable.bufferWhen()` zbie­ra wszyst­kie klik­nię­cia aż do mo­men­tu gdy prze­ka­za­na funk­cja coś wy­emi­tu­je. Ta ro­bi to dopie­ro po 400ms po klik­nię­ciu. Dzięki temu udało nam się wykryć potrójne kliknięcia, które miały miejsce w przeciągu maksymalnie 400 milisekund.
+
 ---
 
 ###### Źródła
 
 * _JavaScript i wzorce projektowe_, wydanie II - Simon Timms,
-* _Programowanie funkcyjne z JavaScriptem. Sposoby na lepszy kod_ - Luis Atencio, 
-* http://reactivex.io/learnrx/
-* https://xgrommx.github.io/rx-book/why_rx.html
-* http://reactivex.io/documentation/observable.html
+* _Programowanie funkcyjne z JavaScriptem. Sposoby na lepszy kod_ - Luis Atencio,
+* [http://reactivex.io/learnrx/](http://reactivex.io/learnrx/)
+* [https://xgrommx.github.io/rx-book/why\_rx.html](https://xgrommx.github.io/rx-book/why_rx.html)
+* [http://reactivex.io/documentation/observable.html](http://reactivex.io/documentation/observable.html)
 * [https://medium.com/@benlesh/learning-observable-by-building-observable](https://medium.com/@benlesh/learning-observable-by-building-observable-d5da57405d87)
+* [https://typeofweb.com/2017/05/20/observable-rxjs/](https://typeofweb.com/2017/05/20/observable-rxjs/)
+
+
+
