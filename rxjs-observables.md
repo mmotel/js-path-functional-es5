@@ -321,52 +321,49 @@ stream1$
 
 Załóżmy, że mamy pole _input_, w którym znajdzie się zapytanie. Chcemy nasłuchiwać na jego zmiany i wykonać akcję tylko gdy długość zapytania jest równa lub większa niż 3.
 
-##### [Przykład 3.14](https://codepen.io/mmotel/pen/XgqRrP)
-
+##### [Przykład 3.14](https://codepen.io/mmotel/pen/NgZOYb)
 ```js
-let queryInput = document.querySelector('#query');
+var queryInput = document.querySelector('#query');
 
 Rx.Observable.fromEvent(queryInput, 'input')
-.map(event => event.target.value)
-.filter(value => value && value.length >= 3)
-.subscribe(observer);
+   .map(function (event) { return event.target.value; })
+   .filter(function (value) { return value && value.length >= 3; })
+   .subscribe(observer);
 ```
 
 Gdy zapytanie jest odpowiednie pobieramy dane z API wykorzystując operator `Rx.Observble.ajax()`.
 
-#### [Przykład 3.15](https://codepen.io/mmotel/pen/GEdmWj)
-
+##### [Przykład 3.15](https://codepen.io/mmotel/pen/Zydqjx)
 ```js
 function search (query) {
-let id = query.split('')
-.map(c => c.charCodeAt(0))
-.reduce((c, acc) => acc + c, 0) % 100 + 1;
-
-return Rx.Observable
-.ajax(`https://jsonplaceholder.typicode.com/posts/${id}`);
+   var id = query.split('')
+      .map(function (c) { return c.charCodeAt(0); })
+      .reduce(function (c, acc) { return acc + c; }, 0) % 100 + 1;
+   
+   return Rx.Observable
+      .ajax(`https://jsonplaceholder.typicode.com/posts/${id}`);
 }
 
-let queryInput = document.querySelector('#query');
+var queryInput = document.querySelector('#query');
 
 Rx.Observable.fromEvent(queryInput, 'input')
-.map(event => event.target.value)
-.filter(value => value && value.length >= 3)
-.flatMap(value => search(value))
-.map(response => response.response)
-.subscribe(observer);
+   .map(function (event) { return event.target.value; })
+   .filter(function (value) { return value && value.length >= 3; })
+   .flatMap(function (value) { return search(value); })
+   .map(function (response) { return response.response; })
+   .subscribe(observer);
 ```
 
 Powstaje jednak pewny problem. Kiedy szybko wpisujemy zapytanie to wysyłanych jest wiele żądań i nie wiadomo w jakiej kolejności wrócą. Gdy wpisujemy zapytanie interesuje nas wynik ostatniego z żądań, poprzednie są zbędne i warto byłoby je anulować.
 
-##### [Przykład 3.16](https://codepen.io/mmotel/pen/dReWdY)
-
+##### [Przykład 3.16](https://codepen.io/mmotel/pen/xroyym)
 ```js
 Rx.Observable.fromEvent(queryInput, 'input')
-.map(event => event.target.value)
-.filter(value => value && value.length >= 3)
-.switchMap(value => search(value))
-.map(response => response.response)
-.subscribe(observer);
+   .map(function (event) { return event.target.value; })
+   .filter(function (value) { return value && value.length >= 3; })
+   .switchMap(function (value) { return search(value); })
+   .map(function (response) { return response.response; })
+   .subscribe(observer);
 ```
 
 Operator `Rx.Observable.switchMap()` zwróci nam wynik ostatniego z zapytań. Dodatkowo anuluje poprzednie żądania dzięki czemu nie będziemy niepotrzebnie obciążać serwera.
@@ -375,41 +372,39 @@ Operator `Rx.Observable.switchMap()` zwróci nam wynik ostatniego z zapytań. Do
 
 Załóżmy, że mamy przycisk _Click me!_ i chcemy reagować na kliknięcia w niego.
 
-##### [Przykład 3.17](https://codepen.io/mmotel/pen/YQLVRp)
+##### [Przykład 3.17](https://codepen.io/mmotel/pen/JJQmez)
 
 ```js
-let clickMeBtn = document.querySelector('#click-me');
+var clickMeBtn, clicks$; 
 
-let clicks$ = Rx.Observable.fromEvent(clickMeBtn, 'click');
+clickMeBtn = document.querySelector('#click-me');
+
+clicks$ = Rx.Observable.fromEvent(clickMeBtn, 'click');
 
 clicks$.subscribe(observer);
 ```
 
 Jednak interesują nas tylko potrójne kliknięcia.
 
-##### [Przykład 3.18](https://codepen.io/mmotel/pen/pwVPBq)
+##### [Przykład 3.18](https://codepen.io/mmotel/pen/QgXZoM)
 
 ```js
-let clicks$ = Rx.Observable.fromEvent(clickMeBtn, 'click');
-
 clicks$
-.bufferCount(3)
-.subscribe(observer);
+   .bufferCount(3)
+   .subscribe(observer);
 ```
 
 Operator `Rx.Observable.bufferCount()` pozwala na buforowanie określonej liczby zdarzeń i zwraca je jako tablicę.
 
 Jednak to jeszcze nie to o co nam chodziło. Potrójne kliknięcie musi odbyć się w krótkim przedziale czasu, na przykład w przeciągu 400 milisekund.
 
-##### [Przykład 3.19](https://codepen.io/mmotel/pen/eRrWww)
+##### [Przykład 3.19](https://codepen.io/mmotel/pen/rwEqbZ)
 
 ```js
-let clicks$ = Rx.Observable.fromEvent(clickMeBtn, 'click');
-
 clicks$
-.bufferWhen(() => clicks$.delay(400))
-.filter(events => events.length >= 3)
-.subscribe(observer);
+   .bufferWhen(function () { return clicks$.delay(400); })
+   .filter(function (events) { return events.length > 3; })
+   .subscribe(observer);
 ```
 
 Operator `Rx.Observable.bufferWhen()` zbie­ra wszyst­kie klik­nię­cia aż do mo­men­tu gdy prze­ka­za­na funk­cja coś wy­emi­tu­je. Ta ro­bi to dopie­ro po 400ms po klik­nię­ciu. Dzięki temu udało nam się wykryć potrójne kliknięcia, które miały miejsce w przeciągu maksymalnie 400 milisekund.
