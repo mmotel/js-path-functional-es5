@@ -229,9 +229,9 @@ Poznaliśmy już kilka sposobów na utworzenie strumienia. `Rx.Observable.from()
 
 Przyjrzyjmy się jak samemu utworzyć strumień. Pozwala na to metoda  `Rx.Observable.create()`. Przyjmuje ona jako parametr funkcję, która jest odpowiedzialna za generowanie elementów strumienia i jego ewentualne zakończenie - nazywaną _subscribe_. 
 
-##### [Przykład 3.11](https://codepen.io/mmotel/pen/RgZVGv)
+##### [Przykład 3.11](https://codepen.io/mmotel/pen/owrazQ)
 ```js
-Rx.Observable.create(observer => {
+Rx.Observable.create(function (observer) {
    observer.next(1);
    observer.next(2);
    observer.next(3);
@@ -251,14 +251,16 @@ Funkcja _subscribe_ przyjmuje jako argument obiekt _observer_, który podobnie j
 
 Podczas obsługi asynchronicznych akcji, na przykład komunikacji z serwerem, zdarza się, że chcemy jednocześnie wykonać kilka strumieni. Pozwala na to metoda `Rx.Observable.forkJoin()`, która subskrybuje kilka strumieni, agreguje ostatnie zwrócone przez nie wartości i kończy działanie kiedy wszystkie strumienie zostaną zakończone.
 
-##### [Przykład 3.12](https://codepen.io/mmotel/pen/YQxVYg)
+##### [Przykład 3.12](https://codepen.io/mmotel/pen/dRBgOw)
 ```js
-let stream1$ = Rx.Observable.create(observer => {
+var stream1$, stream2$;
+
+stream1$ = Rx.Observable.create(function (observer) {
    observer.next(1);
    observer.complete();
 });
 
-let stream2$ = Rx.Observable.create(observer => {
+stream2$ = Rx.Observable.create(function (observer) {
    setTimeout(() => {
       observer.next(2);
       observer.complete();
@@ -274,19 +276,24 @@ Rx.Observable
 
 Podczas komunikacji z serwerem często zdarza się tak, że jedno zapytanie jest zależne od drugiego - wymaga zwróconej przez nie wartości. Możemy dokonać _chain-owania_ strumieni wykorzystując metodę `Rx.Observable.flatMap()`.
 
-##### [Przykład 3.13](https://codepen.io/mmotel/pen/zzdwRR)
+##### [Przykład 3.13](https://codepen.io/mmotel/pen/pwXxeP)
 ```js
-let stream1$ = Rx.Observable.of(3);
+var stream1$, stream2$;
 
-let stream2$ = (count) => Rx.Observable.create(observer => {
-   for(let i = 0; i < count; i += 1) {
-      observer.next(i);
-   }
-   observer.complete();
-});
+stream1$ = Rx.Observable.of(3);
+
+stream2$ = function (count) { 
+   return Rx.Observable
+      .create(function (observer) {
+         for(let i = 0; i < count; i += 1) {
+            observer.next(i);
+         }
+         observer.complete();
+      });
+}
 
 stream1$
-   .flatMap(count => stream2$(count))
+   .flatMap(function (count) { return stream2$(count); })
    .subscribe(observer);
 ```
 
